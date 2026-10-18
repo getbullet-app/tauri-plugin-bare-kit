@@ -26,3 +26,8 @@ tauri-plugin-bare-kit = { path = '../..' }
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 tauri-plugin-webdriver = '0.2'
+
+# 0.2.3 on crates.io pins webview2-com 0.38, which breaks against wry 0.57 on Windows.
+# Drop once a release with webview2-com 0.39 is out.
+[patch.crates-io]
+tauri-plugin-webdriver = { git = 'https://github.com/Choochmeque/tauri-plugin-webdriver', rev = 'b94eb81c9d4359cefdde15bd74d0f7d8a00065b6' }

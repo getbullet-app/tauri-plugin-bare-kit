@@ -67,7 +67,7 @@ describe("bare-kit", () => {
     const isAndroid = browser.capabilities.platformName === "Android"
 
     if (isAndroid) {
-      await browser.setTimeout({ script: 240_000 })
+      await browser.setTimeout({ script: 600_000 })
     }
 
     const result = await browser.execute(

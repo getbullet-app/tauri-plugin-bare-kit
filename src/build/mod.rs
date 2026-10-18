@@ -281,9 +281,9 @@ pub fn autolink() {
                 .status()
                 .unwrap()
                 .success());
-        }
 
-        copy_dir_all(out.join("lib"), PathBuf::from(&*resource_dir));
+            copy_dir_all(out.join("lib"), PathBuf::from(&*resource_dir));
+        }
 
         println!("cargo::rustc-link-arg=-Wl,-rpath=$ORIGIN");
         println!("cargo::rustc-link-search=native={resource_dir}");

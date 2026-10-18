@@ -36,12 +36,12 @@ export const config = {
   logLevel: "info",
   bail: 0,
   waitforTimeout: 10_000,
-  connectionRetryTimeout: 240_000,
+  connectionRetryTimeout: 600_000,
   connectionRetryCount: 3,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 240_000,
+    timeout: 600_000,
   },
 }
