@@ -75,22 +75,22 @@ pub fn autolink() {
     if platform == "darwin" {
         let host = format!("{platform}-{arch}");
 
-        assert!(Command::new(NPX)
-            .current_dir(project)
-            .args(vec![
-                "--yes",
-                "bare-link",
-                "--host",
-                &*host,
-                "--out",
-                &*resource_dir,
-                project.to_str().unwrap(),
-            ])
-            .status()
-            .unwrap()
-            .success());
-
         if let Some(entry) = &entry {
+            assert!(Command::new(NPX)
+                .current_dir(project)
+                .args(vec![
+                    "--yes",
+                    "bare-link",
+                    "--host",
+                    &*host,
+                    "--out",
+                    &*resource_dir,
+                    entry.to_str().unwrap(),
+                ])
+                .status()
+                .unwrap()
+                .success());
+
             assert!(Command::new(NPX)
                 .current_dir(project)
                 .args(vec![
@@ -142,22 +142,22 @@ pub fn autolink() {
         let profile = env::var("PROFILE").unwrap();
         let out = src.join(format!("gen/apple/Externals/{arch}/{profile}"));
 
-        assert!(Command::new(NPX)
-            .current_dir(project)
-            .args(vec![
-                "--yes",
-                "bare-link",
-                "--host",
-                &*host,
-                "--out",
-                out.to_str().unwrap(),
-                project.to_str().unwrap(),
-            ])
-            .status()
-            .unwrap()
-            .success());
-
         if let Some(entry) = &entry {
+            assert!(Command::new(NPX)
+                .current_dir(project)
+                .args(vec![
+                    "--yes",
+                    "bare-link",
+                    "--host",
+                    &*host,
+                    "--out",
+                    out.to_str().unwrap(),
+                    entry.to_str().unwrap(),
+                ])
+                .status()
+                .unwrap()
+                .success());
+
             assert!(Command::new(NPX)
                 .current_dir(project)
                 .args(vec![
@@ -195,22 +195,22 @@ pub fn autolink() {
         };
         let out = src.join("gen/android/app/src/main/jniLibs");
 
-        assert!(Command::new(NPX)
-            .current_dir(project)
-            .args(vec![
-                "--yes",
-                "bare-link",
-                "--host",
-                &*host,
-                "--out",
-                out.to_str().unwrap(),
-                project.to_str().unwrap(),
-            ])
-            .status()
-            .unwrap()
-            .success());
-
         if let Some(entry) = &entry {
+            assert!(Command::new(NPX)
+                .current_dir(project)
+                .args(vec![
+                    "--yes",
+                    "bare-link",
+                    "--host",
+                    &*host,
+                    "--out",
+                    out.to_str().unwrap(),
+                    entry.to_str().unwrap(),
+                ])
+                .status()
+                .unwrap()
+                .success());
+
             assert!(Command::new(NPX)
                 .current_dir(project)
                 .args(vec![
@@ -230,6 +230,7 @@ pub fn autolink() {
 
         let out = out.join(arch);
 
+        fs::create_dir_all(&out).unwrap();
         fs::copy(
             PathBuf::from(&*resource_dir).join("libbare-kit.so"),
             out.join("libbare-kit.so"),
@@ -249,22 +250,22 @@ pub fn autolink() {
         let out = PathBuf::from(env::var("OUT_DIR").unwrap());
         let host = format!("{platform}-{arch}");
 
-        assert!(Command::new(NPX)
-            .current_dir(project)
-            .args(vec![
-                "--yes",
-                "bare-link",
-                "--host",
-                &*host,
-                "--out",
-                out.to_str().unwrap(),
-                project.to_str().unwrap(),
-            ])
-            .status()
-            .unwrap()
-            .success());
-
         if let Some(entry) = &entry {
+            assert!(Command::new(NPX)
+                .current_dir(project)
+                .args(vec![
+                    "--yes",
+                    "bare-link",
+                    "--host",
+                    &*host,
+                    "--out",
+                    out.to_str().unwrap(),
+                    entry.to_str().unwrap(),
+                ])
+                .status()
+                .unwrap()
+                .success());
+
             assert!(Command::new(NPX)
                 .current_dir(project)
                 .args(vec![
@@ -312,22 +313,22 @@ pub fn autolink() {
     if platform == "win32" {
         let host = format!("{platform}-{arch}");
 
-        assert!(Command::new(NPX)
-            .current_dir(project)
-            .args(vec![
-                "--yes",
-                "bare-link",
-                "--host",
-                &*host,
-                "--out",
-                &*resource_dir,
-                project.to_str().unwrap(),
-            ])
-            .status()
-            .unwrap()
-            .success());
-
         if let Some(entry) = &entry {
+            assert!(Command::new(NPX)
+                .current_dir(project)
+                .args(vec![
+                    "--yes",
+                    "bare-link",
+                    "--host",
+                    &*host,
+                    "--out",
+                    &*resource_dir,
+                    entry.to_str().unwrap(),
+                ])
+                .status()
+                .unwrap()
+                .success());
+
             assert!(Command::new(NPX)
                 .current_dir(project)
                 .args(vec![

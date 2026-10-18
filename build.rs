@@ -5,7 +5,7 @@ use std::{
 };
 use zip::ZipArchive;
 
-const VERSION: &str = "2.4.3";
+const VERSION: &str = "2.5.5";
 
 const COMMANDS: &[&str] = &[
     "bare_optimize_for_memory",

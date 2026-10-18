@@ -1,56 +1,63 @@
-
 [package]
-name = 'tauri-plugin-bare-kit'
-version = '0.3.1'
-authors = ['Tomas Ravinskas <tomas@tomasrav.me>']
-description = 'Effortless JavaScript backends for Tauri apps - Android 🤖 iOS 📱Linux 🐧 Macos 🖥️ Windows 💩'
-readme = 'README.md'
-license = 'Apache-2.0'
-repository = 'https://github.com/getbullet-app/tauri-plugin-bare-kit'
-keywords = ['javascript', 'cross-platform', 'tauri-plugin', 'bare-kit']
-edition = '2021'
-rust-version = '1.77.2'
+name = "tauri-plugin-bare-kit"
+version = "0.3.1"
+authors = ["Tomas Ravinskas <tomas@tomasrav.me>"]
+description = "Effortless JavaScript backends for Tauri apps - Android 🤖 iOS 📱Linux 🐧 Macos 🖥️ Windows 💩"
+readme = "README.md"
+license = "Apache-2.0"
+repository = "https://github.com/getbullet-app/tauri-plugin-bare-kit"
+keywords = ["bare-kit", "cross-platform", "javascript", "tauri-plugin"]
+edition = "2021"
+rust-version = "1.77.2"
 exclude = [
-	'/.github',
-	'/.vscode',
-	'/api',
-	'/example',
-	'/node_modules',
-	'/scripts',
-	'/tests',
+  "/.github",
+  "/.vscode",
+  "/api",
+  "/example",
+  "/node_modules",
+  "/scripts",
+  "/tests",
 ]
-links = 'tauri-plugin-bare-kit'
+links = "tauri-plugin-bare-kit"
 
 [dependencies]
-tauri = { version = '2.11.2' }
-parking_lot = '0.12'
-serde = '1.0'
-thiserror = '2'
-tokio = '1'
-
-[target.'cfg(target_os = "android")'.dependencies]
-base64 = '0.22.1'
+parking_lot = "0.12"
+serde = "1"
+tauri = { version = "2" }
+thiserror = "2"
+tokio = "1"
 
 [dev-dependencies]
-rand = '0.10'
+rand = "0.10"
 
 [build-dependencies]
-reqwest = { version = '0.13', default-features = false, features = [
-	'blocking',
-	'rustls-no-provider',
-] }
-bindgen = '0.72.1'
-ring = '0.17'
-rustls = { version = '0.23', default-features = false, features = [
-	'ring',
-	'std',
-	'tls12',
-] }
-tauri-plugin = { version = '2.6.2', features = ['build'] }
-zip = '8'
+bindgen = "0.72"
+reqwest = {
+  version = "0.13",
+  default-features = false,
+  features = [
+    "blocking",
+    "rustls-no-provider",
+  ]
+}
+ring = "0.17"
+rustls = {
+  version = "0.23",
+  default-features = false,
+  features = [
+    "ring",
+    "std",
+    "tls12",
+  ]
+}
+tauri-plugin = { version = "2", features = ["build"] }
+zip = "8"
+
+[target.'cfg(target_os = "android")'.dependencies]
+base64 = "0.22"
 
 [features]
-default = ['runtime']
+default = ["runtime"]
 build = []
 runtime = []
 tests = []

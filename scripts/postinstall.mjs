@@ -17,7 +17,10 @@ if (process.env.INIT_CWD !== process.cwd()) {
   const src_tauri = path.join(root, "src-tauri")
   const project_yaml = path.join(src_tauri, "gen/apple/project.yml")
   const link_ios = await exists(project_yaml)
-  const cargo_toml = TOML.parse(await fs.readFile(path.join(src_tauri, "Cargo.toml"), "utf-8"))
+  const cargo_toml = TOML.parse(
+    await fs.readFile(path.join(src_tauri, "Cargo.toml"), "utf-8"),
+    { x: { multi: true } },
+  )
   const build_rs = await fs.readFile(path.join(src_tauri, "build.rs"), "utf-8")
 
   cargo_toml.dependencies["tauri-plugin-bare-kit"] = pkg.version
@@ -45,45 +48,60 @@ if (process.env.INIT_CWD !== process.cwd()) {
   if (process.platform === "darwin" && link_ios) {
     const yaml = YAML.parse(await fs.readFile(project_yaml, "utf-8"))
     const target = `${yaml.name}_iOS`
-    const ios_dependencies = yaml.targets[target].dependencies
+    const ios_dependencies = yaml.targets[target].dependencies.filter(
+      (dep) => !dep.framework?.startsWith(FRAMEWORK),
+    )
     const frameworks = ["BareKit.framework"]
     const out = path.join(os.tmpdir(), "tauri-plugin-bare-kit", "ios")
     const cwd = process.cwd()
+    let entry = null
 
-    if (await exists(out)) await fs.rm(out, { recursive: true, force: true })
-
-    process.chdir(root)
-
-    for await (const resource of link(root, { hosts: ["ios-arm64"], out })) {
-      if (path.extname(resource) == ".framework") {
-        const framework = path.basename(resource)
-
-        frameworks.push(framework)
+    for (const file of [
+      "bare/app.js",
+      "bare/dist/app.js",
+      "bare/src/app.js",
+      "src-bare/app.js",
+      "src-bare/dist/app.js",
+      "src-bare/src/app.js",
+    ]) {
+      if (await exists(path.join(root, file))) {
+        entry = path.join(root, file)
+        break
       }
     }
 
-    process.chdir(cwd)
+    if (entry) {
+      if (await exists(out)) await fs.rm(out, { recursive: true, force: true })
 
-    await fs.rm(out, { recursive: true, force: true })
+      process.chdir(root)
 
-    for (const framework of frameworks) {
-      const dependency = `${FRAMEWORK}${framework}`
+      for await (const resource of link(entry, { hosts: ["ios-arm64"], out })) {
+        if (path.extname(resource) == ".framework") {
+          const framework = path.basename(resource)
 
-      if (!ios_dependencies.find((dep) => dep.framework === dependency)) {
-        ios_dependencies.push({ framework: dependency })
+          frameworks.push(framework)
+        }
       }
+
+      process.chdir(cwd)
+
+      await fs.rm(out, { recursive: true, force: true })
+
+      for (const framework of frameworks) {
+        ios_dependencies.push({ framework: `${FRAMEWORK}${framework}` })
+      }
+
+      yaml.targets[target].dependencies = ios_dependencies
+      await fs.writeFile(project_yaml, YAML.stringify(yaml))
+
+      const xcodegen = spawn("xcodegen", ["generate", "--spec", project_yaml], {
+        stdio: "inherit",
+      })
+
+      await new Promise((resolve, reject) => {
+        xcodegen.on("error", reject)
+        xcodegen.on("close", resolve)
+      })
     }
-
-    yaml.targets[target].dependencies = ios_dependencies
-    await fs.writeFile(project_yaml, YAML.stringify(yaml))
-
-    const xcodegen = spawn("xcodegen", ["generate", "--spec", project_yaml], {
-      stdio: "inherit",
-    })
-
-    await new Promise((resolve, reject) => {
-      xcodegen.on("error", reject)
-      xcodegen.on("close", resolve)
-    })
   }
 }

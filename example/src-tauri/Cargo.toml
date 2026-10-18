@@ -1,30 +1,33 @@
-
 [package]
 publish = false
-name = 'bare-beam'
-version = '0.1.0'
-description = 'An example P2P chat app powered by Tauri and Bare'
-authors = ['Tomas Ravinskas <tomas@tomasrav.me>']
-license = 'Apache-2.0'
-repository = 'https://github.com/getbullet-app/tauri-plugin-bare-kit/tree/main/example'
-edition = '2021'
-rust-version = '1.77.2'
+name = "bare-beam"
+version = "0.1.0"
+description = "An example P2P chat app powered by Tauri and Bare"
+authors = ["Tomas Ravinskas <tomas@tomasrav.me>"]
+license = "Apache-2.0"
+repository = "https://github.com/getbullet-app/tauri-plugin-bare-kit/tree/main/example"
+edition = "2021"
+rust-version = "1.77.2"
 
 [lib]
-name = 'app_lib'
-crate-type = ['staticlib', 'cdylib', 'rlib']
-
-[build-dependencies]
-tauri-build = { version = '2.6.2', features = [] }
-tauri-plugin-bare-kit = { path = '../../', default-features = false, features = [
-	'build',
-] }
+crate-type = ["cdylib", "rlib", "staticlib"]
+name = "app_lib"
 
 [dependencies]
-serde_json = '1.0'
-serde = { version = '1.0', features = ['derive'] }
-tauri = { version = '2.11.2', features = [] }
-tauri-plugin-bare-kit = { path = '../../' }
-tauri-plugin-clipboard-manager = '2'
-tauri-plugin-dialog = '2'
-tauri-plugin-mobile-fs = { path = '../tauri-plugin-mobile-fs/' }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tauri-plugin-bare-kit = { path = "../../" }
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-mobile-fs = { path = "../tauri-plugin-mobile-fs/" }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+tauri-plugin-bare-kit = {
+  path = "../../",
+  default-features = false,
+  features = [
+    "build",
+  ]
+}

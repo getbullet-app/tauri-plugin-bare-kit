@@ -1,7 +1,9 @@
 describe("bare-kit", () => {
+  before(() => browser.waitUntil(() => browser.execute(() => "Deferred" in window)))
+
   it("suspend resume", async () => {
-    const result = await browser.executeAsync(async (done) => {
-      const { b4a, BareKit } = window
+    const result = await browser.execute(async () => {
+      const { BareKit } = window
 
       let suspend = false
       let resume = false
@@ -18,7 +20,7 @@ describe("bare-kit", () => {
       await new Promise((resolve) => setTimeout(resolve, 100))
       await worklet.terminate()
 
-      done({ suspend, resume })
+      return { suspend, resume }
     })
 
     expect(result.suspend).toBe(true)
@@ -26,7 +28,7 @@ describe("bare-kit", () => {
   })
 
   it("ipc", async () => {
-    const result = await browser.executeAsync(async (done) => {
+    const result = await browser.execute(async () => {
       const { b4a, BareKit, Deferred } = window
 
       const deferred = new Deferred()
@@ -36,7 +38,6 @@ describe("bare-kit", () => {
       const worklet = await BareKit.Worklet.init()
       const IPC = worklet.IPC
 
-      IPC.on("error", () => done(0))
       IPC.on("data", (data) => {
         if (b4a.toString(data) === payload) {
           matches++
@@ -56,7 +57,7 @@ describe("bare-kit", () => {
       await deferred.promise
       await worklet.terminate()
 
-      done(matches)
+      return matches
     })
 
     expect(result).toBe(3)
@@ -69,8 +70,8 @@ describe("bare-kit", () => {
       await browser.setTimeout({ script: 240_000 })
     }
 
-    const result = await browser.executeAsync(
-      async (isAndroid, done) => {
+    const result = await browser.execute(
+      async (isAndroid) => {
         const { b4a, BareKit, Deferred } = window
 
         const deferred = new Deferred()
@@ -97,7 +98,7 @@ describe("bare-kit", () => {
         await deferred.promise
         await worklet.terminate()
 
-        done(b4a.equals(b4a.concat(received), payload))
+        return b4a.equals(b4a.concat(received), payload)
       },
       [isAndroid],
     )
