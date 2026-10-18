@@ -6,7 +6,9 @@ import TOML from "@ltd/j-toml"
 
 const root = path.dirname(import.meta.dirname)
 const pkg = JSON.parse(await fs.readFile(path.join(root, "package.json"), "utf-8"))
-const cargo_toml = TOML.parse(await fs.readFile(path.join(root, "Cargo.toml"), "utf-8"))
+const cargo_toml = TOML.parse(await fs.readFile(path.join(root, "Cargo.toml"), "utf-8"), {
+  x: { multi: true },
+})
 
 cargo_toml.package.version = pkg.version
 
